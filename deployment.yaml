@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flipkart-app
+  labels:
+    app: flipkart
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flipkart
+  template:
+    metadata:
+      labels:
+        app: flipkart
+    spec:
+      containers:
+        - name: flipkart-app
+          image: your-dockerhub-username/flipkart-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENV
+              value: "production"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
